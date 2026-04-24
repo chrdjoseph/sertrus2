@@ -1,478 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sertrus2 | Digital Auctions</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sertrus2 | Digital Auctions</title>
 
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
 
-    body {
-      font-family: Arial, sans-serif;
-      background: radial-gradient(circle at top, #163bff 0%, #07111f 38%, #02040a 100%);
-      color: #ffffff;
-      min-height: 100vh;
-    }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f4f7fb;
+  color: #111;
+}
 
-    header {
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.35);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(14px);
-    }
+/* HEADER */
+.header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 16px;
+  background:#fff;
+  border-bottom:1px solid #eee;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
 
-    .logo {
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: 1px;
-    }
+.logo {
+  font-size:20px;
+  font-weight:800;
+}
 
-    .logo span { color: #58f3ff; }
+.logo span { color:#4f7cff; }
 
-    nav a {
-      color: #dcefff;
-      text-decoration: none;
-      margin-left: 18px;
-      font-weight: 700;
-    }
+.top-switch {
+  display:flex;
+  background:#eef3ff;
+  border-radius:30px;
+  padding:4px;
+}
 
-    .hero {
-      padding: 70px 20px 40px;
-      max-width: 1150px;
-      margin: auto;
-      text-align: center;
-    }
+.switch-btn {
+  padding:8px 14px;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+}
 
-    .hero h1 {
-      font-size: clamp(38px, 7vw, 82px);
-      line-height: 1;
-      margin-bottom: 20px;
-    }
+.active {
+  background:linear-gradient(135deg,#00c6ff,#6a5cff);
+  color:#fff;
+}
 
-    .hero p {
-      color: #b8c7df;
-      max-width: 760px;
-      margin: 0 auto 30px;
-      font-size: 18px;
-      line-height: 1.6;
-    }
+/* NAV BAR */
+.nav-bar {
+  display:flex;
+  overflow-x:auto;
+  gap:16px;
+  padding:10px;
+  background:#fff;
+  border-bottom:1px solid #eee;
+  font-size:14px;
+}
 
-    .hero-actions {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
+.nav-bar span { white-space:nowrap; }
 
-    button, .btn {
-      border: 0;
-      border-radius: 14px;
-      padding: 14px 20px;
-      font-weight: 900;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
+/* LIVE BAR */
+.live-bar {
+  background:#0b1b3f;
+  color:#fff;
+  padding:8px 12px;
+  font-size:13px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
 
-    .btn-primary {
-      background: linear-gradient(135deg, #58f3ff, #2266ff);
-      color: #00111b;
-      box-shadow: 0 0 28px rgba(88,243,255,0.35);
-    }
+/* HERO */
+.hero {
+  text-align:center;
+  padding:40px 20px;
+  background:#fff;
+}
 
-    .btn-secondary {
-      background: rgba(255,255,255,0.1);
-      color: #ffffff;
-      border: 1px solid rgba(255,255,255,0.22);
-    }
+.hero h1 {
+  font-size:32px;
+  line-height:1.2;
+  margin-bottom:15px;
+}
 
-    .section {
-      max-width: 1150px;
-      margin: auto;
-      padding: 32px 20px;
-    }
+.hero span {
+  background:linear-gradient(135deg,#00c6ff,#6a5cff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 
-    .section-title {
-      font-size: 30px;
-      margin-bottom: 18px;
-    }
+.hero p {
+  color:#555;
+  font-size:16px;
+  line-height:1.6;
+  margin-bottom:20px;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 18px;
-    }
+.btn {
+  padding:12px 18px;
+  border-radius:10px;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+}
 
-    .card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 22px;
-      padding: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-    }
+.primary {
+  background:linear-gradient(135deg,#00c6ff,#6a5cff);
+  color:#fff;
+}
 
-    .auction-card {
-      min-height: 260px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+.secondary {
+  background:#eee;
+}
 
-    .badge {
-      display: inline-block;
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 900;
-      margin-bottom: 12px;
-    }
+/* GRID */
+.grid {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+  padding:20px;
+}
 
-    .xrpl { background: rgba(88,243,255,0.16); color: #58f3ff; }
-    .solana { background: rgba(177,92,255,0.18); color: #d7a6ff; }
+/* CARD */
+.card {
+  background:#fff;
+  border-radius:16px;
+  padding:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+}
 
-    .auction-title {
-      font-size: 22px;
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
+.badge {
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:10px;
+}
 
-    .auction-meta {
-      color: #b8c7df;
-      font-size: 14px;
-      line-height: 1.7;
-    }
+.xrpl {
+  background:#e6f7ff;
+  color:#00aaff;
+}
 
-    .price {
-      font-size: 28px;
-      font-weight: 900;
-      margin: 16px 0;
-      color: #58f3ff;
-    }
+.price {
+  font-size:26px;
+  font-weight:800;
+  color:#00aaff;
+  margin:10px 0;
+}
 
-    .countdown {
-      font-family: monospace;
-      background: rgba(0,0,0,0.45);
-      border: 1px solid rgba(88,243,255,0.25);
-      padding: 10px;
-      border-radius: 12px;
-      margin: 12px 0;
-      color: #ffffff;
-    }
+.countdown {
+  background:#111;
+  color:#fff;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:10px;
+  font-family:monospace;
+}
 
-    .danger-pulse {
-      animation: pulse 0.8s infinite;
-      color: #ff5c7a;
-      border-color: rgba(255,92,122,0.5);
-    }
+.enter-btn {
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#00c6ff,#6a5cff);
+  color:#fff;
+  border:none;
+  font-weight:700;
+}
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.45; }
-    }
-
-    form {
-      display: grid;
-      gap: 12px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(0,0,0,0.35);
-      color: white;
-    }
-
-    input::placeholder { color: #9db0ca; }
-
-    .status {
-      margin-top: 14px;
-      color: #b8c7df;
-      font-size: 14px;
-    }
-
-    footer {
-      text-align: center;
-      color: #8ea4c2;
-      padding: 40px 20px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      margin-top: 40px;
-    }
-
-    @media (max-width: 700px) {
-      header {
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      nav a {
-        margin: 0 8px;
-        font-size: 14px;
-      }
-
-      .hero {
-        padding-top: 45px;
-      }
-    }
-  </style>
+/* BOTTOM NAV */
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#fff;
+  border-top:1px solid #eee;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  font-size:12px;
+}
+</style>
 </head>
 
 <body>
-  <header>
-    <div class="logo">Sertrus<span>2</span></div>
-    <nav>
-      <a href="#auctions">Auctions</a>
-      <a href="#create">Create</a>
-      <a href="#wallet">Wallet</a>
-    </nav>
-  </header>
 
-  <section class="hero">
-    <h1>The Future of Digital Auctions</h1>
-    <p>
-      Bid on digital products using XRPL and Solana-powered auction flows.
-      Built for fast entry, transparent payouts, and global access.
-    </p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="#auctions">View Auctions</a>
-      <a class="btn btn-secondary" href="#create">Create Auction</a>
-    </div>
-  </section>
+<div class="header">
+  <div class="logo">Sertrus<span>2</span></div>
 
-  <section class="section" id="wallet">
-    <h2 class="section-title">Wallet Access</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>XRPL Auctions</h3>
-        <p class="auction-meta">Use Xaman for XRP/XRPL auction entries.</p>
-        <button class="btn-primary" onclick="connectXaman()">Connect Xaman</button>
-      </div>
+  <div class="top-switch">
+    <div class="switch-btn active">Auctions</div>
+    <div class="switch-btn">Marketplace</div>
+  </div>
+</div>
 
-      <div class="card">
-        <h3>Solana Auctions</h3>
-        <p class="auction-meta">Use Phantom for Solana auction entries.</p>
-        <button class="btn-primary" onclick="connectPhantom()">Connect Phantom</button>
-      </div>
-    </div>
-    <div class="status" id="walletStatus">Wallet not connected.</div>
-  </section>
+<div class="nav-bar">
+  <span>All</span>
+  <span>Design</span>
+  <span>Dev</span>
+  <span>Writing</span>
+  <span>Video</span>
+  <span>Music</span>
+  <span>Marketing</span>
+</div>
 
-  <section class="section" id="auctions">
-    <h2 class="section-title">Live Auctions</h2>
-    <div id="auctionList" class="grid">
-      <div class="card">Loading auctions...</div>
-    </div>
-  </section>
+<div class="live-bar">
+  <span>LIVE</span>
+  <span>Entry from $0.25 XRP</span>
+  <span>Top 5 advance</span>
+</div>
 
-  <section class="section" id="create">
-    <h2 class="section-title">Create Auction</h2>
-    <div class="card">
-      <form onsubmit="createAuction(event)">
-        <input id="title" placeholder="Auction title" required />
-        <input id="starting_price" type="number" step="0.01" placeholder="Starting price" required />
-        <input id="reserve_price" type="number" step="0.01" placeholder="Reserve price" required />
-        <select id="chain">
-          <option value="xrpl">XRPL Auction</option>
-          <option value="solana">Solana Auction</option>
-        </select>
-        <button class="btn-primary" type="submit">Create Auction</button>
-      </form>
-      <div class="status" id="createStatus"></div>
-    </div>
-  </section>
+<div class="hero">
+  <h1>Win Premium Digital Products for <span>Pennies.</span></h1>
+  <p>Enter auctions from $0.25 XRP. Top 5 entrants advance to final bidding.</p>
+  <button class="btn primary">Browse Auctions</button>
+  <button class="btn secondary">How it Works</button>
+</div>
 
-  <footer>
-    Sertrus2 © 2026 — Digital auctions powered by XRPL and Solana.
-  </footer>
+<div id="auctionList" class="grid">
+  Loading auctions...
+</div><div class="hero" id="marketplace" style="display:none;">
+  <h1>Hire Expert Digital Services, Secured by <span>XRP.</span></h1>
+  <p>Browse verified sellers for design, development, writing and more. Every order is protected by XRPL escrow.</p>
+  <button class="btn primary">Explore Marketplace</button>
+  <button class="btn secondary">How Escrow Works</button>
+</div>
 
-  <script>
-    const API = "https://sertrus2-api.chrdjoseph.workers.dev";
+<div class="bottom-nav">
+  <div>🏠<br>Home</div>
+  <div>🛍️<br>Market</div>
+  <div>🏪<br>Sell</div>
+  <div>👤<br>Sign In</div>
+  <div>•••<br>More</div>
+</div>
 
-    let connectedWallet = null;
-    let connectedChain = null;
+<script>
+const API = "https://sertrus2-api.chrdjoseph.workers.dev";
 
-    async function loadAuctions() {
-      const list = document.getElementById("auctionList");
+async function loadAuctions() {
+  const list = document.getElementById("auctionList");
 
-      try {
-        const res = await fetch(API + "/auctions");
-        const data = await res.json();
+  try {
+    const res = await fetch(API + "/auctions");
+    const data = await res.json();
+    const auctions = Array.isArray(data) ? data : data.auctions || [];
 
-        const auctions = Array.isArray(data) ? data : data.auctions || [];
+    if (!auctions.length) {
+      list.innerHTML = "<div class='card'>No live auctions found yet.</div>";
+      return;
+    }
 
-        if (!auctions.length) {
-          list.innerHTML = '<div class="card">No live auctions found yet.</div>';
-          return;
-        }
+    list.innerHTML = auctions.map(a => {
+      const title = a.title || a.name || "Untitled Auction";
+      const id = a.id || a.auction_id || "";
+      const price = a.current_price || a.current_bid || a.starting_price || a.amount || "0.25";
+      const end = a.ends_at || a.end_time || a.expires_at || "";
 
-        list.innerHTML = auctions.map((auction) => {
-          const chain = (auction.chain || auction.network || "xrpl").toLowerCase();
-          const badgeClass = chain.includes("sol") ? "solana" : "xrpl";
-          const badgeText = chain.includes("sol") ? "SOLANA AUCTION" : "XRPL AUCTION";
-
-          const title = auction.title || auction.name || "Untitled Auction";
-          const price = auction.current_price || auction.current_bid || auction.starting_price || auction.amount || "0.25";
-          const id = auction.id || auction.auction_id || "";
-          const endsAt = auction.ends_at || auction.end_time || auction.expires_at || "";
-
-          return `
-            <div class="card auction-card">
-              <div>
-                <span class="badge ${badgeClass}">${badgeText}</span>
-                <div class="auction-title">${escapeHtml(title)}</div>
-                <div class="auction-meta">Auction ID: ${escapeHtml(String(id))}</div>
-                <div class="price">$${escapeHtml(String(price))}</div>
-                <div class="countdown" data-end="${escapeHtml(String(endsAt))}">
-                  Calculating countdown...
-                </div>
-              </div>
-              <button class="btn-primary" onclick="enterAuction('${escapeHtml(String(id))}', '${chain}')">
-                Enter Auction
-              </button>
-            </div>
-          `;
-        }).join("");
-
-        updateCountdowns();
-      } catch (err) {
-        list.innerHTML = `
-          <div class="card">
-            Auctions could not load. Check your API route: <br><br>
-            <strong>${API}/auctions</strong>
+      return `
+        <div class="card">
+          <span class="badge xrpl">XRPL AUCTION</span>
+          <h2>${escapeHtml(title)}</h2>
+          <p>Auction ID: ${escapeHtml(String(id))}</p>
+          <div class="price">$${escapeHtml(String(price))}</div>
+          <div class="countdown" data-end="${escapeHtml(String(end))}">
+            Calculating...
           </div>
-        `;
-      }
+          <button class="enter-btn" onclick="enterAuction('${escapeHtml(String(id))}')">
+            Enter Auction
+          </button>
+        </div>
+      `;
+    }).join("");
+
+    updateCountdowns();
+  } catch (err) {
+    list.innerHTML = "<div class='card'>Auctions could not load. Check API connection.</div>";
+  }
+}
+
+function enterAuction(id) {
+  alert("Auction selected: " + id + "\\nXaman payment flow connects in the next phase.");
+}
+
+function updateCountdowns() {
+  document.querySelectorAll(".countdown").forEach(timer => {
+    const end = timer.getAttribute("data-end");
+
+    if (!end) {
+      timer.textContent = "Ending time not available";
+      return;
     }
 
-    async function createAuction(event) {
-      event.preventDefault();
+    const endTime = new Date(end).getTime();
 
-      const status = document.getElementById("createStatus");
-      status.textContent = "Creating auction...";
-
-      const payload = {
-        title: document.getElementById("title").value,
-        starting_price: Number(document.getElementById("starting_price").value),
-        reserve_price: Number(document.getElementById("reserve_price").value),
-        chain: document.getElementById("chain").value
-      };
-
-      try {
-        const res = await fetch(API + "/auctions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || "Create auction failed.");
-        }
-
-        status.textContent = "Auction created successfully.";
-        event.target.reset();
-        loadAuctions();
-      } catch (err) {
-        status.textContent = "Create failed: " + err.message;
-      }
+    if (isNaN(endTime)) {
+      timer.textContent = "Ending time not available";
+      return;
     }
 
-    function enterAuction(id, chain) {
-      if (chain.includes("sol")) {
-        connectPhantom();
-        alert("Solana auction selected. Phantom payment flow still needs backend connection.");
-      } else {
-        connectXaman();
-        alert("XRPL auction selected. Xaman payment flow still needs backend connection.");
-      }
+    const diff = endTime - Date.now();
+
+    if (diff <= 0) {
+      timer.textContent = "Auction ended";
+      return;
     }
 
-    async function connectPhantom() {
-      const status = document.getElementById("walletStatus");
+    const h = Math.floor(diff / 1000 / 60 / 60);
+    const m = Math.floor((diff / 1000 / 60) % 60);
+    const s = Math.floor((diff / 1000) % 60);
 
-      try {
-        if (!window.solana || !window.solana.isPhantom) {
-          status.textContent = "Phantom wallet not found. Install Phantom first.";
-          return;
-        }
+    timer.textContent =
+      String(h).padStart(2, "0") + "h : " +
+      String(m).padStart(2, "0") + "m : " +
+      String(s).padStart(2, "0") + "s";
+  });
+}
 
-        const resp = await window.solana.connect();
-        connectedWallet = resp.publicKey.toString();
-        connectedChain = "solana";
+function escapeHtml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
-        status.textContent = "Connected Phantom: " + connectedWallet;
-      } catch (err) {
-        status.textContent = "Phantom connection cancelled.";
-      }
-    }
+loadAuctions();
+setInterval(updateCountdowns, 1000);
+</script>
 
-    function connectXaman() {
-      connectedChain = "xrpl";
-      document.getElementById("walletStatus").textContent =
-        "Xaman connection must be handled by your backend Xaman sign-in route.";
-    }
-
-    function updateCountdowns() {
-      const timers = document.querySelectorAll(".countdown");
-
-      timers.forEach(timer => {
-        const end = timer.getAttribute("data-end");
-
-        if (!end) {
-          timer.textContent = "Ending time not available";
-          return;
-        }
-
-        const endTime = new Date(end).getTime();
-
-        if (isNaN(endTime)) {
-          timer.textContent = "Ending time not available";
-          return;
-        }
-
-        const diff = endTime - Date.now();
-
-        if (diff <= 0) {
-          timer.textContent = "Auction ended";
-          timer.classList.add("danger-pulse");
-          return;
-        }
-
-        const hours = Math.floor(diff / 1000 / 60 / 60);
-        const minutes = Math.floor((diff / 1000 / 60) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
-
-        timer.textContent =
-          String(hours).padStart(2, "0") + "h : " +
-          String(minutes).padStart(2, "0") + "m : " +
-          String(seconds).padStart(2, "0") + "s";
-
-        if (diff <= 120000) {
-          timer.classList.add("danger-pulse");
-        }
-      });
-    }
-
-    function escapeHtml(value) {
-      return value
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    loadAuctions();
-    setInterval(updateCountdowns, 1000);
-  </script>
 </body>
 </html>
