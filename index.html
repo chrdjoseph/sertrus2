@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sertrus2 Auction</title>
+</head>
+<body>
+
+<h1>Sertrus2</h1>
+
+<h2>Create Auction</h2>
+<input id="title" placeholder="Title"><br><br>
+<input id="start_price" placeholder="Starting Price"><br><br>
+<input id="reserve_price" placeholder="Reserve Price"><br><br>
+<button onclick="createAuction()">Create</button>
+
+<h2>Bid</h2>
+<input id="auction_id" placeholder="Auction ID"><br><br>
+<input id="amount" placeholder="Amount"><br><br>
+<button onclick="placeBid()">Bid</button>
+
+<h2>Auctions</h2>
+<div id="list"></div>
+
+<script>
+const API = "https://sertrus2-api.chrdjoseph.workers.dev";
+
+async function loadAuctions() {
+  const res = await fetch(API + "/auctions");
+  const data = await res.json();
+
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  data.forEach(a => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <b>${a.title}</b><br>
+      ID: ${a.id}<br>
+      Current: ${a.current_price}<br><br>
+    `;
+    list.appendChild(div);
+  });
+}
+
+async function createAuction() {
+  const title = document.getElementById("title").value;
+  const start_price = document.getElementById("start_price").value;
+  const reserve_price = document.getElementById("reserve_price").value;
+
+  const res = await fetch(API + "/create-auction", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      title: title,
+      start_price: parseFloat(start_price),
+      reserve_price: parseFloat(reserve_price),
+      wallet: "test"
+    })
+  });
+
+  const data = await res.json();
+  alert("Created Auction ID: " + data.id);
+
+  loadAuctions();
+}
+
+async function placeBid() {
+  const id = document.getElementById("auction_id").value;
+  const amount = document.getElementById("amount").value;
+
+  const res = await fetch(API + "/bid", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      auction_id: id,
+      amount: parseFloat(amount),
+      wallet: "test"
+    })
+  });
+
+  const data = await res.json();
+  alert(JSON.stringify(data));
+
+  loadAuctions();
+}
+
+loadAuctions();
+</script>
+
+</body>
+</html>
