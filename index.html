@@ -1,342 +1,841 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sertrus2 | Digital Auctions</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sertrus2 | 2050 Digital Auctions</title>
 
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #f5f8fc;
+  --ink: #111827;
+  --muted: #64748b;
+  --line: #dbeafe;
+  --card: rgba(255,255,255,0.9);
+  --dark: #07111f;
+  --navy: #0b1538;
+  --blue: #2563eb;
+  --cyan: #20d9ff;
+  --purple: #6d28d9;
+  --green: #16a34a;
+  --danger: #ef4444;
+  --gold: #f59e0b;
+}
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #f4f7fb;
-  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(32,217,255,.20), transparent 30%),
+    radial-gradient(circle at 90% 10%, rgba(109,40,217,.18), transparent 30%),
+    linear-gradient(180deg, #ffffff 0%, #f5f8fc 42%, #edf4ff 100%);
+  color: var(--ink);
+  min-height: 100vh;
+  padding-bottom: 96px;
 }
 
-/* HEADER */
-.header {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:12px 16px;
-  background:#fff;
-  border-bottom:1px solid #eee;
-  position:sticky;
-  top:0;
-  z-index:100;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-.logo {
-  font-size:20px;
-  font-weight:800;
+button {
+  font-family: inherit;
 }
 
-.logo span { color:#4f7cff; }
-
-.top-switch {
-  display:flex;
-  background:#eef3ff;
-  border-radius:30px;
-  padding:4px;
+/* TOP HEADER */
+.s2-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(148,163,184,.22);
 }
 
-.switch-btn {
-  padding:8px 14px;
-  border-radius:20px;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
+.s2-header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px;
+  align-items: center;
 }
 
-.active {
-  background:linear-gradient(135deg,#00c6ff,#6a5cff);
-  color:#fff;
+.s2-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -1.2px;
+  color: #0f172a;
+  white-space: nowrap;
 }
 
-/* NAV BAR */
-.nav-bar {
-  display:flex;
-  overflow-x:auto;
-  gap:16px;
-  padding:10px;
-  background:#fff;
-  border-bottom:1px solid #eee;
-  font-size:14px;
+.s2-logo-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 35% 35%, #ffffff 0 7%, transparent 8%),
+    linear-gradient(135deg, var(--cyan), var(--blue), var(--purple));
+  box-shadow: 0 10px 30px rgba(37,99,235,.28);
 }
 
-.nav-bar span { white-space:nowrap; }
+.s2-logo span {
+  color: var(--blue);
+}
 
-/* LIVE BAR */
-.live-bar {
-  background:#0b1b3f;
-  color:#fff;
-  padding:8px 12px;
-  font-size:13px;
-  display:flex;
-  gap:10px;
-  align-items:center;
+.s2-search {
+  display: flex;
+  align-items: center;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 11px 15px;
+  min-width: 260px;
+}
+
+.s2-search input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  width: 100%;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.s2-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.s2-pill-btn {
+  border: 1px solid rgba(148,163,184,.35);
+  background: #fff;
+  color: #0f172a;
+  border-radius: 14px;
+  padding: 10px 13px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(15,23,42,.05);
+}
+
+.s2-pill-btn.primary {
+  border: 0;
+  color: white;
+  background: linear-gradient(135deg, #0891b2, #2563eb, #6d28d9);
+}
+
+.s2-wallet-chip {
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* AUCTION NAV */
+.s2-auction-nav {
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(148,163,184,.22);
+  background: rgba(255,255,255,.74);
+}
+
+.s2-auction-nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  gap: 22px;
+  padding: 0 18px;
+}
+
+.s2-tab {
+  white-space: nowrap;
+  padding: 14px 2px 12px;
+  font-size: 15px;
+  font-weight: 900;
+  color: #334155;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+
+.s2-tab.active {
+  color: #0891b2;
+  border-bottom-color: var(--cyan);
+}
+
+/* LIVE STATUS STRIP */
+.s2-live-strip {
+  background: linear-gradient(90deg, #06102b, #111a46, #06102b);
+  color: white;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.s2-live-track {
+  display: flex;
+  gap: 34px;
+  padding: 11px 18px;
+  min-width: max-content;
+  animation: s2-marquee 34s linear infinite;
+}
+
+.s2-live-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  color: #e2e8f0;
+}
+
+.s2-live-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 18px var(--cyan);
+}
+
+@keyframes s2-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 /* HERO */
-.hero {
-  text-align:center;
-  padding:40px 20px;
-  background:#fff;
+.s2-hero {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 54px 18px 34px;
+  display: grid;
+  grid-template-columns: 1.04fr .96fr;
+  gap: 24px;
+  align-items: center;
 }
 
-.hero h1 {
-  font-size:32px;
-  line-height:1.2;
-  margin-bottom:15px;
+.s2-hero-copy {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,255,255,.56)),
+    radial-gradient(circle at top left, rgba(32,217,255,.18), transparent 35%);
+  border: 1px solid rgba(148,163,184,.22);
+  border-radius: 34px;
+  padding: 34px;
+  box-shadow: 0 24px 70px rgba(15,23,42,.10);
 }
 
-.hero span {
-  background:linear-gradient(135deg,#00c6ff,#6a5cff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+.s2-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #0891b2;
+  font-weight: 900;
+  letter-spacing: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 9px 13px;
+  border: 1px solid rgba(8,145,178,.28);
+  border-radius: 999px;
+  background: rgba(236,254,255,.78);
+  margin-bottom: 18px;
 }
 
-.hero p {
-  color:#555;
-  font-size:16px;
-  line-height:1.6;
-  margin-bottom:20px;
+.s2-hero h1 {
+  font-size: clamp(44px, 7vw, 82px);
+  line-height: .95;
+  letter-spacing: -4px;
+  margin-bottom: 18px;
+  color: #0f172a;
 }
 
-.btn {
-  padding:12px 18px;
-  border-radius:10px;
-  font-weight:600;
-  border:none;
-  cursor:pointer;
+.s2-gradient-text {
+  background: linear-gradient(135deg, #0891b2, #2563eb, #6d28d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.primary {
-  background:linear-gradient(135deg,#00c6ff,#6a5cff);
-  color:#fff;
+.s2-hero p {
+  font-size: 19px;
+  line-height: 1.65;
+  color: #475569;
+  max-width: 680px;
+  margin-bottom: 22px;
 }
 
-.secondary {
-  background:#eee;
+.s2-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-/* GRID */
-.grid {
-  display:grid;
-  grid-template-columns:1fr;
-  gap:16px;
-  padding:20px;
+.s2-cta {
+  border: 0;
+  border-radius: 16px;
+  padding: 15px 19px;
+  font-weight: 900;
+  cursor: pointer;
+  font-size: 15px;
 }
 
-/* CARD */
-.card {
-  background:#fff;
-  border-radius:16px;
-  padding:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+.s2-cta.main {
+  color: #fff;
+  background: linear-gradient(135deg, #0891b2, #2563eb, #6d28d9);
+  box-shadow: 0 16px 32px rgba(37,99,235,.24);
 }
 
-.badge {
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:10px;
+.s2-cta.ghost {
+  background: #fff;
+  border: 1px solid rgba(148,163,184,.35);
+  color: #0f172a;
 }
 
-.xrpl {
-  background:#e6f7ff;
-  color:#00aaff;
+/* HERO TERMINAL */
+.s2-terminal {
+  position: relative;
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(32,217,255,.26), transparent 35%),
+    radial-gradient(circle at 80% 0%, rgba(109,40,217,.22), transparent 36%),
+    linear-gradient(180deg, #0b1538, #07111f);
+  border: 1px solid rgba(32,217,255,.20);
+  box-shadow: 0 28px 80px rgba(2,6,23,.28);
+  color: #fff;
+  overflow: hidden;
+  min-height: 420px;
 }
 
-.price {
-  font-size:26px;
-  font-weight:800;
-  color:#00aaff;
-  margin:10px 0;
+.s2-terminal-top {
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,.10);
 }
 
-.countdown {
-  background:#111;
-  color:#fff;
-  padding:10px;
-  border-radius:10px;
-  margin-bottom:10px;
-  font-family:monospace;
+.s2-terminal-title {
+  font-weight: 900;
+  color: #e2e8f0;
 }
 
-.enter-btn {
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  background:linear-gradient(135deg,#00c6ff,#6a5cff);
-  color:#fff;
-  border:none;
-  font-weight:700;
+.s2-terminal-live {
+  color: var(--cyan);
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* BOTTOM NAV */
-.bottom-nav {
-  position:fixed;
-  bottom:0;
-  width:100%;
-  background:#fff;
-  border-top:1px solid #eee;
-  display:flex;
-  justify-content:space-around;
-  padding:10px 0;
-  font-size:12px;
+.s2-terminal-body {
+  padding: 22px;
+}
+
+.s2-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.s2-metric {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.s2-metric strong {
+  display: block;
+  font-size: 30px;
+  color: var(--cyan);
+  margin-bottom: 5px;
+}
+
+.s2-metric span {
+  color: #cbd5e1;
+  font-weight: 800;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.s2-flow {
+  margin-top: 18px;
+  display: grid;
+  gap: 11px;
+}
+
+.s2-flow-step {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(2,6,23,.42);
+  border: 1px solid rgba(32,217,255,.18);
+  border-radius: 16px;
+  padding: 13px 14px;
+}
+
+.s2-flow-step b {
+  color: white;
+}
+
+.s2-flow-step span {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+/* MAIN LAYOUT */
+.s2-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 12px 18px 40px;
+}
+
+.s2-section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 18px 0;
+}
+
+.s2-section-head h2 {
+  font-size: 34px;
+  letter-spacing: -1.2px;
+}
+
+.s2-section-head p {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* POOL FILTERS */
+.s2-pool-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-bottom: 18px;
+  padding-bottom: 5px;
+}
+
+.s2-pool-btn {
+  white-space: nowrap;
+  border: 1px solid rgba(148,163,184,.35);
+  background: rgba(255,255,255,.82);
+  color: #0f172a;
+  border-radius: 999px;
+  padding: 11px 15px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.s2-pool-btn.active {
+  background: linear-gradient(135deg, #0891b2, #2563eb);
+  color: #fff;
+  border-color: transparent;
+}/* AUCTION GRID */
+.s2-auction-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.s2-auction-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.82));
+  border: 1px solid rgba(148,163,184,.25);
+  border-radius: 26px;
+  padding: 18px;
+  box-shadow: 0 22px 54px rgba(15,23,42,.10);
+  overflow: hidden;
+}
+
+.s2-auction-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(32,217,255,.16), transparent 34%),
+    radial-gradient(circle at 90% 10%, rgba(109,40,217,.14), transparent 32%);
+  pointer-events: none;
+}
+
+.s2-card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.s2-badge-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.s2-chain-badge,
+.s2-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.s2-chain-badge {
+  background: rgba(236,254,255,.95);
+  color: #0891b2;
+}
+
+.s2-status-badge {
+  background: rgba(220,252,231,.95);
+  color: #15803d;
+}
+
+.s2-auction-title {
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: -.6px;
+  margin-bottom: 9px;
+}
+
+.s2-auction-id {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.4;
+  word-break: break-all;
+  margin-bottom: 12px;
+}
+
+.s2-price {
+  font-size: 36px;
+  font-weight: 950;
+  color: #0891b2;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+}
+
+.s2-countdown {
+  background: linear-gradient(180deg, #07111f, #0b1538);
+  color: #fff;
+  border: 1px solid rgba(32,217,255,.24);
+  border-radius: 16px;
+  padding: 12px 13px;
+  font-family: "Courier New", monospace;
+  font-size: 16px;
+  font-weight: 900;
+  margin-bottom: 13px;
+  box-shadow: inset 0 0 18px rgba(32,217,255,.08);
+}
+
+.s2-countdown.danger {
+  color: #fecaca;
+  border-color: rgba(239,68,68,.55);
+  animation: s2-pulse .7s infinite;
+}
+
+@keyframes s2-pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: .45; }
+}
+
+.s2-enter-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 16px;
+  padding: 14px 16px;
+  color: #fff;
+  background: linear-gradient(135deg, #0891b2, #2563eb, #6d28d9);
+  font-size: 15px;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 18px 35px rgba(37,99,235,.22);
+}
+
+.s2-admin-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.s2-dashboard-card {
+  background: rgba(255,255,255,.86);
+  border: 1px solid rgba(148,163,184,.24);
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 18px 42px rgba(15,23,42,.08);
+}
+
+.s2-dashboard-card h3 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.s2-dashboard-card p {
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+
+/* WALLET PANEL */
+.s2-wallet-panel {
+  position: fixed;
+  inset: auto 18px 94px auto;
+  width: min(420px, calc(100vw - 36px));
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(148,163,184,.28);
+  border-radius: 26px;
+  box-shadow: 0 28px 80px rgba(15,23,42,.22);
+  padding: 18px;
+  z-index: 200;
+  display: none;
+}
+
+.s2-wallet-panel.open {
+  display: block;
+}
+
+.s2-wallet-panel h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.s2-wallet-panel p {
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.s2-wallet-buttons {
+  display: grid;
+  gap: 10px;
+}
+
+.s2-wallet-button {
+  border: 1px solid rgba(148,163,184,.32);
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: left;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.s2-wallet-button small {
+  display: block;
+  color: #64748b;
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+/* BOTTOM MOBILE NAV */
+.s2-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(18px);
+  border-top: 1px solid rgba(148,163,184,.25);
+  display: none;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 9px 8px 11px;
+}
+
+.s2-bottom-item {
+  text-align: center;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.s2-bottom-item span {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 980px) {
+  .s2-header-inner {
+    grid-template-columns: 1fr auto;
+  }
+
+  .s2-search {
+    display: none;
+  }
+
+  .s2-hero {
+    grid-template-columns: 1fr;
+    padding-top: 28px;
+  }
+
+  .s2-auction-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .s2-admin-row {
+    grid-template-columns: 1fr;
+  }
+
+  .s2-bottom-nav {
+    display: grid;
+  }
+
+  .s2-actions .desktop-only {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .s2-logo {
+    font-size: 24px;
+  }
+
+  .s2-logo-mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+  }
+
+  .s2-header-inner {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .s2-pill-btn {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .s2-hero-copy {
+    padding: 24px;
+    border-radius: 28px;
+  }
+
+  .s2-hero h1 {
+    letter-spacing: -2.6px;
+  }
+
+  .s2-terminal {
+    min-height: auto;
+  }
+
+  .s2-metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .s2-section-head {
+    align-items: start;
+    flex-direction: column;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <div class="logo">Sertrus<span>2</span></div>
+<header class="s2-header">
+  <div class="s2-header-inner">
+    <a class="s2-logo" href="#">
+      <div class="s2-logo-mark"></div>
+      Sertrus<span>2</span>
+    </a>
 
-  <div class="top-switch">
-    <div class="switch-btn active">Auctions</div>
-    <div class="switch-btn">Marketplace</div>
+    <div class="s2-search">
+      <input id="searchInput" placeholder="Search live digital auctions..." oninput="renderAuctions()" />
+    </div>
+
+    <div class="s2-actions">
+      <button class="s2-pill-btn desktop-only" onclick="goSeller()">🏪 Seller</button>
+      <button class="s2-pill-btn desktop-only" onclick="goAdmin()">🛡️ Admin</button>
+      <button class="s2-pill-btn primary s2-wallet-chip" id="walletChip" onclick="toggleWalletPanel()">Connect Wallet</button>
+    </div>
   </div>
-</div>
 
-<div class="nav-bar">
-  <span>All</span>
-  <span>Design</span>
-  <span>Dev</span>
-  <span>Writing</span>
-  <span>Video</span>
-  <span>Music</span>
-  <span>Marketing</span>
-</div>
+  <nav class="s2-auction-nav">
+    <div class="s2-auction-nav-inner">
+      <div class="s2-tab active" onclick="setPool('all', this)">All Auctions</div>
+      <div class="s2-tab" onclick="setPool('open', this)">🟢 Entry Open</div>
+      <div class="s2-tab" onclick="setPool('final', this)">🔥 Final Bidding</div>
+      <div class="s2-tab" onclick="setPool('5', this)">📚 $5 Pool</div>
+      <div class="s2-tab" onclick="setPool('10', this)">🎵 $10 Pool</div>
+      <div class="s2-tab" onclick="setPool('20', this)">🎨 $20 Pool</div>
+      <div class="s2-tab" onclick="setPool('50', this)">🖥️ $50 Pool</div>
+      <div class="s2-tab" onclick="setPool('100', this)">🚀 $100 Pool</div>
+    </div>
+  </nav>
+</header>
 
-<div class="live-bar">
-  <span>LIVE</span>
-  <span>Entry from $0.25 XRP</span>
-  <span>Top 5 advance</span>
-</div>
+<section class="s2-live-strip">
+  <div class="s2-live-track">
+    <div class="s2-live-item"><span class="s2-live-dot"></span> LIVE AUCTIONS</div>
+    <div class="s2-live-item">Entry starts at $0.25 XRP</div>
+    <div class="s2-live-item">🏆 Top 5 finalists advance</div>
+    <div class="s2-live-item">⚡ XRPL-powered settlement</div>
+    <div class="s2-live-item">🛡️ Anti-snipe auction logic</div>
 
-<div class="hero">
-  <h1>Win Premium Digital Products for <span>Pennies.</span></h1>
-  <p>Enter auctions from $0.25 XRP. Top 5 entrants advance to final bidding.</p>
-  <button class="btn primary">Browse Auctions</button>
-  <button class="btn secondary">How it Works</button>
-</div>
+    <div class="s2-live-item"><span class="s2-live-dot"></span> LIVE AUCTIONS</div>
+    <div class="s2-live-item">Entry starts at $0.25 XRP</div>
+    <div class="s2-live-item">🏆 Top 5 finalists advance</div>
+    <div class="s2-live-item">⚡ XRPL-powered settlement</div>
+    <div class="s2-live-item">🛡️ Anti-snipe auction logic</div>
+  </div>
+</section>
 
-<div id="auctionList" class="grid">
-  Loading auctions...
-</div><div class="hero" id="marketplace" style="display:none;">
-  <h1>Hire Expert Digital Services, Secured by <span>XRP.</span></h1>
-  <p>Browse verified sellers for design, development, writing and more. Every order is protected by XRPL escrow.</p>
-  <button class="btn primary">Explore Marketplace</button>
-  <button class="btn secondary">How Escrow Works</button>
-</div>
+<section class="s2-hero">
+  <div class="s2-hero-copy">
+    <div class="s2-kicker"><span class="s2-live-dot"></span> XRP + Solana Digital Auctions</div>
+    <h1>Win premium digital products for <span class="s2-gradient-text">pennies.</span></h1>
+    <p>
+      Enter live auctions from low entry amounts, climb into the top finalist group,
+      then compete in final bidding. Built for fast digital products, transparent wallets,
+      and global buyers.
+    </p>
+    <div class="s2-hero-actions">
+      <button class="s2-cta main" onclick="scrollToAuctions()">Browse Live Auctions →</button>
+      <button class="s2-cta ghost" onclick="toggleWalletPanel()">Connect Wallet</button>
+      <button class="s2-cta ghost" onclick="goSeller()">Seller Dashboard</button>
+    </div>
+  </div>
 
-<div class="bottom-nav">
-  <div>🏠<br>Home</div>
-  <div>🛍️<br>Market</div>
-  <div>🏪<br>Sell</div>
-  <div>👤<br>Sign In</div>
-  <div>•••<br>More</div>
-</div>
+  <div class="s2-terminal">
+    <div class="s2-terminal-top">
+      <div class="s2-terminal-title">Sertrus2 Auction Engine</div>
+      <div class="s2-terminal-live"><span class="s2-live-dot"></span> LIVE</div>
+    </div>
 
-<script>
-const API = "https://sertrus2-api.chrdjoseph.workers.dev";
-
-async function loadAuctions() {
-  const list = document.getElementById("auctionList");
-
-  try {
-    const res = await fetch(API + "/auctions");
-    const data = await res.json();
-    const auctions = Array.isArray(data) ? data : data.auctions || [];
-
-    if (!auctions.length) {
-      list.innerHTML = "<div class='card'>No live auctions found yet.</div>";
-      return;
-    }
-
-    list.innerHTML = auctions.map(a => {
-      const title = a.title || a.name || "Untitled Auction";
-      const id = a.id || a.auction_id || "";
-      const price = a.current_price || a.current_bid || a.starting_price || a.amount || "0.25";
-      const end = a.ends_at || a.end_time || a.expires_at || "";
-
-      return `
-        <div class="card">
-          <span class="badge xrpl">XRPL AUCTION</span>
-          <h2>${escapeHtml(title)}</h2>
-          <p>Auction ID: ${escapeHtml(String(id))}</p>
-          <div class="price">$${escapeHtml(String(price))}</div>
-          <div class="countdown" data-end="${escapeHtml(String(end))}">
-            Calculating...
-          </div>
-          <button class="enter-btn" onclick="enterAuction('${escapeHtml(String(id))}')">
-            Enter Auction
-          </button>
+    <div class="s2-terminal-body">
+      <div class="s2-metric-grid">
+        <div class="s2-metric">
+          <strong id="metricLive">0</strong>
+          <span>Live Auctions</span>
         </div>
-      `;
-    }).join("");
+        <div class="s2-metric">
+          <strong>$0.25</strong>
+          <span>Entry From</span>
+        </div>
+        <div class="s2-metric">
+          <strong>Top 5</strong>
+          <span>Finalists</span>
+        </div>
+      </div>
 
-    updateCountdowns();
-  } catch (err) {
-    list.innerHTML = "<div class='card'>Auctions could not load. Check API connection.</div>";
-  }
-}
-
-function enterAuction(id) {
-  alert("Auction selected: " + id + "\\nXaman payment flow connects in the next phase.");
-}
-
-function updateCountdowns() {
-  document.querySelectorAll(".countdown").forEach(timer => {
-    const end = timer.getAttribute("data-end");
-
-    if (!end) {
-      timer.textContent = "Ending time not available";
-      return;
-    }
-
-    const endTime = new Date(end).getTime();
-
-    if (isNaN(endTime)) {
-      timer.textContent = "Ending time not available";
-      return;
-    }
-
-    const diff = endTime - Date.now();
-
-    if (diff <= 0) {
-      timer.textContent = "Auction ended";
-      return;
-    }
-
-    const h = Math.floor(diff / 1000 / 60 / 60);
-    const m = Math.floor((diff / 1000 / 60) % 60);
-    const s = Math.floor((diff / 1000) % 60);
-
-    timer.textContent =
-      String(h).padStart(2, "0") + "h : " +
-      String(m).padStart(2, "0") + "m : " +
-      String(s).padStart(2, "0") + "s";
-  });
-}
-
-function escapeHtml(value) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-loadAuctions();
-setInterval(updateCountdowns, 1000);
-</script>
-
-</body>
-</html>
+      <div class="s2-flow">
+        <div class="s2-flow-step"><b>1. Entry Open</b><span>Wallet payment verified</span></div>
+        <div class="s2-flow-step"><b>2. Pool Builds</b><span>Entrants compete by volume</span></div>
+        <div class="s2-flow-step"><b>3. Final Bidding</b><span>Highest bid wins</span></div>
+        <div class="s2-flow-step"><b>4. Settlement</b><span>Seller payout + platform fee</span></div>
+      </div>
+    </div>
+  </div>
+</section>
