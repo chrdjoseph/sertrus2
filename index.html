@@ -839,3 +839,404 @@ button {
     </div>
   </div>
 </section>
+</section>
+
+<main class="s2-main" id="auctions">
+  <div class="s2-section-head">
+    <div>
+      <h2>Live Digital Auctions</h2>
+      <p>Browse active Sertrus2 auctions. Connect Xaman or Phantom to enter.</p>
+    </div>
+  </div>
+
+  <div class="s2-pool-row">
+    <button class="s2-pool-btn active" onclick="setPool('all', this)">All</button>
+    <button class="s2-pool-btn" onclick="setPool('5', this)">$5 Pools</button>
+    <button class="s2-pool-btn" onclick="setPool('10', this)">$10 Pools</button>
+    <button class="s2-pool-btn" onclick="setPool('20', this)">$20 Pools</button>
+    <button class="s2-pool-btn" onclick="setPool('50', this)">$50 Pools</button>
+    <button class="s2-pool-btn" onclick="setPool('100', this)">$100 Pools</button>
+  </div>
+
+  <div id="auctionGrid" class="s2-auction-grid">
+    <div class="s2-auction-card">
+      <div class="s2-card-content">Loading live auctions...</div>
+    </div>
+  </div>
+
+  <section style="margin-top:30px;">
+    <div class="s2-dashboard-card">
+      <h3>Want to sell digital products?</h3>
+      <p>Connect your Xaman or Phantom wallet first. If your wallet is already approved as a seller, you’ll be sent to your seller area. If not, you’ll be asked to become a seller.</p>
+      <button class="s2-cta main" onclick="startSellFlow()">Sell on Sertrus2</button>
+    </div>
+  </section>
+
+  <section style="margin-top:30px;">
+    <div class="s2-section-head">
+      <div>
+        <h2>Trust & Auction Protection</h2>
+        <p>Built for transparent auction entry, verified wallets, refunds, and seller payouts.</p>
+      </div>
+    </div>
+
+    <div class="s2-admin-row">
+      <div class="s2-dashboard-card">
+        <h3>Wallet Verified Entry</h3>
+        <p>Buyers connect Xaman or Phantom before entering auctions. XRPL and Solana auctions stay visually separated.</p>
+      </div>
+
+      <div class="s2-dashboard-card">
+        <h3>Refund Protection</h3>
+        <p>If an auction does not meet its threshold or is cancelled, eligible entries should be queued for refund through the auction backend.</p>
+      </div>
+
+      <div class="s2-dashboard-card">
+        <h3>Seller Payout Tracking</h3>
+        <p>Completed auctions should create payout records for sellers and platform fee records for Sertrus2.</p>
+      </div>
+
+      <div class="s2-dashboard-card">
+        <h3>Auction-Only Launch</h3>
+        <p>Marketplace is intentionally removed from the public launch experience. Sertrus2 is focused on digital auctions first.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="walletPanel" class="s2-wallet-panel">
+  <h3>Connect Wallet</h3>
+  <p>Choose the wallet you want to use for Sertrus2 auctions.</p>
+
+  <div class="s2-wallet-buttons">
+    <button class="s2-wallet-button" onclick="connectXaman()">
+      Xaman / XRPL
+      <small>Use for XRPL auctions and XRP entries.</small>
+    </button>
+
+    <button class="s2-wallet-button" onclick="connectPhantom()">
+      Phantom / Solana
+      <small>Use for Solana auctions when Solana payment routes are enabled.</small>
+    </button>
+
+    <button class="s2-wallet-button" onclick="toggleWalletPanel()">
+      Close
+    </button>
+  </div>
+</div>
+
+<nav class="s2-bottom-nav">
+  <div class="s2-bottom-item" onclick="scrollToAuctions()"><span>🏠</span>Home</div>
+  <div class="s2-bottom-item" onclick="scrollToAuctions()"><span>🔥</span>Auctions</div>
+  <div class="s2-bottom-item" onclick="startSellFlow()"><span>🏪</span>Sell</div>
+  <div class="s2-bottom-item" onclick="toggleWalletPanel()"><span>👛</span>Wallet</div>
+  <div class="s2-bottom-item" onclick="scrollToTrust()"><span>🛡️</span>Trust</div>
+</nav>
+
+<footer style="max-width:1280px;margin:0 auto;padding:35px 18px 90px;color:#64748b;">
+  <div style="border-top:1px solid rgba(148,163,184,.3);padding-top:22px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;">
+    <strong>Sertrus2 © 2026</strong>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;font-weight:800;">
+      <a href="/terms">Terms</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/refund-policy">Refunds</a>
+      <a href="/how-it-works">How Auctions Work</a>
+      <a href="/trust">Trust & Safety</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const API = "https://sertrus2-api.chrdjoseph.workers.dev";
+
+let allAuctions = [];
+let activePool = "all";
+let connectedWallet = null;
+let connectedChain = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+  removePublicAdminButton();
+  renameSellerButton();
+  loadAuctions();
+  setInterval(updateCountdowns, 1000);
+});
+
+function removePublicAdminButton() {
+  document.querySelectorAll("button").forEach(btn => {
+    if (btn.textContent.toLowerCase().includes("admin")) {
+      btn.remove();
+    }
+  });
+}
+
+function renameSellerButton() {
+  document.querySelectorAll("button").forEach(btn => {
+    if (btn.textContent.toLowerCase().includes("seller")) {
+      btn.textContent = "🏪 Sell";
+      btn.onclick = startSellFlow;
+    }
+  });
+}
+
+function toggleWalletPanel() {
+  document.getElementById("walletPanel").classList.toggle("open");
+}
+
+function scrollToAuctions() {
+  document.getElementById("auctions").scrollIntoView({ behavior: "smooth" });
+}
+
+function scrollToTrust() {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+function setPool(pool, el) {
+  activePool = pool;
+
+  document.querySelectorAll(".s2-tab, .s2-pool-btn").forEach(x => {
+    x.classList.remove("active");
+  });
+
+  if (el) el.classList.add("active");
+
+  renderAuctions();
+}
+
+async function loadAuctions() {
+  const grid = document.getElementById("auctionGrid");
+
+  try {
+    const res = await fetch(API + "/auctions");
+    const data = await res.json();
+
+    allAuctions = Array.isArray(data) ? data : data.auctions || [];
+    document.getElementById("metricLive").textContent = allAuctions.length;
+
+    renderAuctions();
+  } catch (err) {
+    grid.innerHTML = `
+      <div class="s2-auction-card">
+        <div class="s2-card-content">
+          <h3>Auctions could not load</h3>
+          <p class="s2-auction-id">Check backend route: ${API}/auctions</p>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function renderAuctions() {
+  const grid = document.getElementById("auctionGrid");
+  const search = (document.getElementById("searchInput")?.value || "").toLowerCase();
+
+  let auctions = allAuctions.filter(a => {
+    const title = String(a.title || a.name || "").toLowerCase();
+    const poolValue = String(a.pool || a.pool_value || a.reserve_price || a.target_amount || "");
+    const matchesSearch = !search || title.includes(search);
+    const matchesPool = activePool === "all" || activePool === "open" || activePool === "final" || poolValue.includes(activePool);
+    return matchesSearch && matchesPool;
+  });
+
+  if (!auctions.length) {
+    grid.innerHTML = `
+      <div class="s2-auction-card">
+        <div class="s2-card-content">
+          <h3>No matching live auctions</h3>
+          <p class="s2-auction-id">Try another pool or search term.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = auctions.map(a => {
+    const id = a.id || a.auction_id || "";
+    const title = a.title || a.name || "Untitled Auction";
+    const chain = String(a.chain || a.network || "xrpl").toLowerCase();
+    const price = a.current_price || a.current_bid || a.starting_price || a.amount || "0.25";
+    const end = a.ends_at || a.end_time || a.expires_at || "";
+    const chainLabel = chain.includes("sol") ? "SOLANA AUCTION" : "XRPL AUCTION";
+
+    return `
+      <div class="s2-auction-card">
+        <div class="s2-card-content">
+          <div class="s2-badge-row">
+            <span class="s2-chain-badge">${chainLabel}</span>
+            <span class="s2-status-badge">LIVE</span>
+          </div>
+
+          <h3 class="s2-auction-title">${escapeHtml(title)}</h3>
+          <div class="s2-auction-id">Auction ID: ${escapeHtml(String(id))}</div>
+          <div class="s2-price">$${escapeHtml(String(price))}</div>
+
+          <div class="s2-countdown" data-end="${escapeHtml(String(end))}">
+            Calculating...
+          </div>
+
+          <button class="s2-enter-btn" onclick="enterAuction('${escapeHtml(String(id))}', '${chain}')">
+            Enter Auction
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  updateCountdowns();
+}
+
+async function connectPhantom() {
+  try {
+    if (!window.solana || !window.solana.isPhantom) {
+      alert("Phantom wallet not found. Install Phantom first.");
+      return null;
+    }
+
+    const resp = await window.solana.connect();
+    connectedWallet = resp.publicKey.toString();
+    connectedChain = "solana";
+
+    document.getElementById("walletChip").textContent =
+      connectedWallet.slice(0, 5) + "..." + connectedWallet.slice(-5);
+
+    toggleWalletPanel();
+    return connectedWallet;
+  } catch (err) {
+    alert("Phantom connection cancelled.");
+    return null;
+  }
+}
+
+async function connectXaman() {
+  try {
+    const res = await fetch(API + "/api/xaman/signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+
+    const data = await res.json();
+
+    if (data.qr_png || data.qr || data.url || data.next) {
+      const link = data.url || data.next || data.refs?.qr_png || data.qr_png;
+      window.open(link, "_blank");
+    }
+
+    alert("Xaman sign-in started. After approving in Xaman, refresh or return to Sertrus2.");
+    connectedChain = "xrpl";
+    return true;
+  } catch (err) {
+    alert("Xaman sign-in route is not responding. Backend route needed: /api/xaman/signin");
+    return null;
+  }
+}
+
+async function startSellFlow() {
+  if (!connectedWallet && !connectedChain) {
+    toggleWalletPanel();
+    alert("Connect Xaman or Phantom first. After wallet connection, Sertrus2 will check if you are already a seller.");
+    return;
+  }
+
+  try {
+    const res = await fetch(API + "/api/auth/me", {
+      credentials: "include"
+    });
+
+    const data = await res.json();
+
+    if (data && data.isSeller) {
+      window.location.href = "/seller";
+      return;
+    }
+
+    const wantsSeller = confirm("This wallet is not registered as a seller yet. Become a seller now?");
+    if (!wantsSeller) return;
+
+    const register = await fetch(API + "/api/seller/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        wallet: connectedWallet,
+        chain: connectedChain
+      })
+    });
+
+    if (register.ok) {
+      window.location.href = "/seller";
+    } else {
+      alert("Seller registration route is not ready yet. Backend needed: POST /api/seller/register");
+    }
+  } catch (err) {
+    alert("Seller check failed. Backend needed: /api/auth/me and /api/seller/register");
+  }
+}
+
+async function enterAuction(id, chain) {
+  if (!id) {
+    alert("Missing auction ID.");
+    return;
+  }
+
+  if (chain.includes("sol")) {
+    const wallet = connectedWallet || await connectPhantom();
+    if (!wallet) return;
+
+    alert("Phantom connected. Solana auction payment route still needs backend verification before launch.");
+    return;
+  }
+
+  await connectXaman();
+  alert("XRPL auction selected. Next backend step: create Xaman payment payload for auction ID " + id);
+}
+
+function updateCountdowns() {
+  document.querySelectorAll(".s2-countdown").forEach(timer => {
+    const end = timer.getAttribute("data-end");
+
+    if (!end) {
+      timer.textContent = "Ending time not available";
+      return;
+    }
+
+    const endTime = new Date(end).getTime();
+
+    if (isNaN(endTime)) {
+      timer.textContent = "Ending time not available";
+      return;
+    }
+
+    const diff = endTime - Date.now();
+
+    if (diff <= 0) {
+      timer.textContent = "Auction ended";
+      timer.classList.add("danger");
+      return;
+    }
+
+    const h = Math.floor(diff / 1000 / 60 / 60);
+    const m = Math.floor((diff / 1000 / 60) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    timer.textContent =
+      String(h).padStart(2, "0") + "h : " +
+      String(m).padStart(2, "0") + "m : " +
+      String(s).padStart(2, "0") + "s";
+
+    if (diff <= 120000) {
+      timer.classList.add("danger");
+    }
+  });
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+</script>
+
+</body>
+</html>
